@@ -2,12 +2,18 @@
 
 #### pastlauncher #####
 
-import logging
-logger = logging.getLogger("main")
-logger.setLevel(logging.INFO)
-fh = logging.FileHandler("latest.log")
-fh.setLevel(logging.DEBUG)
-logger.addHandler(fh)
+# Setup logging
+import logging, os, sys
+try: os.remove("latest.log")
+except: pass
+logger = logging.getLogger()
+logger.setLevel(logging.DEBUG)
+stdout_handler = logging.StreamHandler(sys.stdout)
+stdout_handler.setLevel(logging.INFO)
+file_handler = logging.FileHandler("latest.log")
+file_handler.setLevel(logging.DEBUG)
+logger.addHandler(file_handler)
+logger.addHandler(stdout_handler)
 logger.debug("Logging enabled.")
 
 logger.info("Loading pastlauncher...")
@@ -15,7 +21,9 @@ logger.info("Loading pastlauncher...")
 # Detect OS
 import platform
 global system; system = platform.system()
-logger.debug("OS detected:", system)
+logger.debug("OS detected: " + str(system))
+
+import subprocess # Import module for command execution
 
 # Create the devnull
 global devnull; devnull = open(os.devnull, "w")
