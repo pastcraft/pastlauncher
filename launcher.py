@@ -2,6 +2,11 @@
 
 #### pastlauncher #####
 
+
+
+# Import definitions
+from scripts import definitions
+
 # Setup logging
 import logging, os, sys
 try: os.remove("latest.log")
@@ -10,9 +15,9 @@ logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 stdout_handler = logging.StreamHandler(sys.stdout)
 stdout_handler.setLevel(logging.INFO)
-file_handler = logging.FileHandler("latest.log")
-file_handler.setLevel(logging.DEBUG)
-logger.addHandler(file_handler)
+logfile_handler = logging.FileHandler("latest.log")
+logfile_handler.setLevel(logging.DEBUG)
+logger.addHandler(logfile_handler)
 logger.addHandler(stdout_handler)
 logger.debug("Logging enabled.")
 
