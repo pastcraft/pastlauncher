@@ -5,30 +5,42 @@
 
 
 # Import definitions
-from scripts import definitions
+from scripts import definitions as defs
+
+# Detect OS
+import platform
+global system; system = platform.system()
+
+# Set app ID and title
+import ctypes
+
+if system == "Windows":
+    ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(defs.appid)
+
+if system == "Windows":
+    ctypes.windll.kernel32.SetConsoleTitleA(defs.title + " (Log)") # ANSI
+    ctypes.windll.kernel32.SetConsoleTitleW(defs.title + " (Log)") # UNICODE
 
 # Setup logging
 import logging, os, sys
-try: os.remove("latest.log")
+try: os.remove(defs.logfile)
 except: pass
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 stdout_handler = logging.StreamHandler(sys.stdout)
 stdout_handler.setLevel(logging.INFO)
-logfile_handler = logging.FileHandler("latest.log")
+logfile_handler = logging.FileHandler(defs.logfile)
 logfile_handler.setLevel(logging.DEBUG)
 logger.addHandler(logfile_handler)
 logger.addHandler(stdout_handler)
 logger.debug("Logging enabled.")
 
-logger.info("Loading pastlauncher...")
+logger.info("Loading " + defs.title + "...")
+logger.info("Version: " + defs.verstr)
+logger.info("OS: " + str(system).strip())
 
-# Detect OS
-import platform
-global system; system = platform.system()
-logger.debug("OS detected: " + str(system))
-
-import subprocess # Import module for command execution
+# Import module for command execution
+import subprocess
 
 # Create the devnull
 global devnull; devnull = open(os.devnull, "w")
