@@ -63,3 +63,49 @@ global time_now; time_now = datetime.now()
 global time_hms; time_hms = time_now.strftime("%H:%M:%S")
 global time_hm; time_hm = time_now.strftime("%H:%M")
 logger.debug("Got time.")
+
+def launchscript(file):
+    if system == "Windows":
+        file = file + ".bat"
+        os.system(file)
+    elif system == "Linux":
+        file = file + ".sh"
+        os.system("sh ./" + file)
+    elif system == "Darwin":
+        file = file + ".bash"
+        os.system("./" + file)
+
+logger.debug("Importing PyQt5...")
+
+# Import PyQt
+try:
+    from PyQt5 import QtCore, QtGui, QtWidgets, uic
+except ImportError:
+    launchscript("install")
+    logger.info("PyQt wasn't installed, please restart the launcher.")
+    sys.exit()
+
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
+from PyQt5.uic import *
+
+logger.debug("Imported PyQt5.")
+
+logger.info("Loading UI...")
+
+global app; app = QApplication(sys.argv)
+app.setStyle(defs.skin)
+
+logger.debug("Loading fonts...")
+
+try:
+    fontDB = QFontDatabase()
+    fontDB.addApplicationFont("fonts/Saira.ttf")
+    fontDB.addApplicationFont("fonts/SairaItalic.ttf")
+except:
+    logger.debug("Couldn't find fonts!")
+
+
+
+app.exec()
